@@ -38,5 +38,13 @@ public class MyGsonTest {
         assertThat(status.getReasonPhrase()).isEqualTo("Unknown");
     }
 
-
+    @Test
+    void shouldWriteStatusTypeAsInt() throws IOException {
+        StatusTypeAdapter adapter = new StatusTypeAdapter(Collections.emptyMap());
+        StringWriter out = new StringWriter();
+        JsonWriter writer = new JsonWriter(out);
+        adapter.write(writer, Status.NOT_FOUND);
+        writer.flush();
+        assertThat(out.toString()).contains("404");
+    }
 }
