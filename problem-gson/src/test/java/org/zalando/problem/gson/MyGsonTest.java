@@ -47,4 +47,12 @@ public class MyGsonTest {
         writer.flush();
         assertThat(out.toString()).contains("404");
     }
+
+    @Test
+    void shouldReadKnownStatusCode() throws IOException {
+        Map<Integer, StatusType> map = Collections.singletonMap(404, Status.NOT_FOUND);
+        JsonReader reader = new JsonReader(new StringReader("404"));
+        StatusType result = new StatusTypeAdapter(map).read(reader);
+        assertThat(result).isEqualTo(Status.NOT_FOUND);
+    }
 }
