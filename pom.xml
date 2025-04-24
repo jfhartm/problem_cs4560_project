@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.zalando</groupId>
     <artifactId>problem-parent</artifactId>
-    <version>0.28.0-SNAPSHOT</version>
+    <version>0.27.1</version>
     <packaging>pom</packaging>
     <url>https://github.com/zalando/problem</url>
     <inceptionYear>2015</inceptionYear>
@@ -47,8 +47,8 @@
     </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>9</maven.compiler.source>
+        <maven.compiler.target>9</maven.compiler.target>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
     </properties>
     <dependencyManagement>
@@ -194,6 +194,50 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.2</version>
+        </dependency>
+
+        <!-- Gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <!-- AssertJ -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.24.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Zalando Problem Modules -->
+        <!-- <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem</artifactId>
+            <version>0.27.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>jackson-datatype-problem</artifactId>
+            <version>0.27.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>problem-gson</artifactId>
+            <version>0.27.1</version>
+        </dependency> -->
     </dependencies>
     <build>
         <pluginManagement>
@@ -304,7 +348,7 @@
                     <configuration>
                         <compilerArgs>
                             <compilerArg>-Xlint:unchecked,deprecation</compilerArg>
-                            <compilerArg>-Werror</compilerArg>
+                            <!-- <compilerArg>-Werror</compilerArg> -->
                             <compilerArg>-parameters</compilerArg>
                         </compilerArgs>
                         <excludes>

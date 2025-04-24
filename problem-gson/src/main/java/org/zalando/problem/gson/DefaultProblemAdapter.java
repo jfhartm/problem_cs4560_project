@@ -7,7 +7,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import lombok.AllArgsConstructor;
 import org.zalando.problem.Problem;
 import org.zalando.problem.ProblemBuilder;
 import org.zalando.problem.StatusType;
@@ -19,9 +18,7 @@ import java.util.Map;
 import static com.google.gson.internal.bind.TypeAdapters.STRING;
 import static com.google.gson.internal.bind.TypeAdapters.URI;
 import static java.util.Arrays.stream;
-import static lombok.AccessLevel.PRIVATE;
 
-@AllArgsConstructor(access = PRIVATE)
 final class DefaultProblemAdapter extends TypeAdapter<ThrowableProblem> {
 
     private final Gson gson;
@@ -42,6 +39,19 @@ final class DefaultProblemAdapter extends TypeAdapter<ThrowableProblem> {
                 gson.getAdapter(ThrowableProblem.class).nullSafe());
     }
 
+    DefaultProblemAdapter(
+            final Gson gson,
+            final boolean stackTraces,
+            final TypeAdapter<Map<String, Object>> parameters,
+            final TypeAdapter<StatusType> status,
+            final TypeAdapter<ThrowableProblem> cause) {
+        this.gson = gson;
+        this.stackTraces = stackTraces;
+        this.parameters = parameters;
+        this.status = status;
+        this.cause = cause;
+    }
+
     @Override
     public void write(final JsonWriter out, final ThrowableProblem problem) throws IOException {
         final JsonObject object = new JsonObject();
@@ -54,8 +64,7 @@ final class DefaultProblemAdapter extends TypeAdapter<ThrowableProblem> {
         object.add("cause", cause.toJsonTree(problem.getCause()));
 
         parameters.toJsonTree(problem.getParameters()).getAsJsonObject()
-                .entrySet().forEach(entry ->
-                object.add(entry.getKey(), entry.getValue()));
+                .entrySet().forEach(entry -> object.add(entry.getKey(), entry.getValue()));
 
         if (stackTraces) {
             object.add("stacktrace", gson.getAdapter(String[].class)

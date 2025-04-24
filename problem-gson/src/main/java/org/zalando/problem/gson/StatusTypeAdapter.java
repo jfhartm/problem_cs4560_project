@@ -4,7 +4,6 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import lombok.AllArgsConstructor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.zalando.problem.StatusType;
 
@@ -12,10 +11,13 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
-@AllArgsConstructor
 final class StatusTypeAdapter extends TypeAdapter<StatusType> {
 
-    private Map<Integer, StatusType> index;
+    private final Map<Integer, StatusType> index;
+
+    StatusTypeAdapter(final Map<Integer, StatusType> index) {
+        this.index = index;
+    }
 
     @Override
     public void write(
@@ -40,7 +42,8 @@ final class StatusTypeAdapter extends TypeAdapter<StatusType> {
         }
 
         final int statusCode = in.nextInt();
-        @Nullable final StatusType status = index.get(statusCode);
+        @Nullable
+        final StatusType status = index.get(statusCode);
         return status == null ? new UnknownStatus(statusCode) : status;
     }
 

@@ -128,7 +128,6 @@ public final class ProblemAdapterFactory implements TypeAdapterFactory {
         return new ProblemTypeAdapter<T>(gson, type).nullSafe();
     }
 
-    @AllArgsConstructor(access = PRIVATE)
     private final class ProblemTypeAdapter<T> extends TypeAdapter<T> {
 
         private final Gson gson;
@@ -136,7 +135,16 @@ public final class ProblemAdapterFactory implements TypeAdapterFactory {
         private final TypeAdapter<ThrowableProblem> defaultAdapter;
 
         ProblemTypeAdapter(final Gson gson, final TypeToken<T> type) {
-            this(gson, type, new DefaultProblemAdapter(gson, stackTraces));
+            this.gson = gson;
+            this.type = type;
+            this.defaultAdapter = new DefaultProblemAdapter(gson, stackTraces);
+        }
+
+        ProblemTypeAdapter(final Gson gson, final TypeToken<T> type,
+                final TypeAdapter<ThrowableProblem> defaultAdapter) {
+            this.gson = gson;
+            this.type = type;
+            this.defaultAdapter = defaultAdapter;
         }
 
         @Override
@@ -164,20 +172,19 @@ public final class ProblemAdapterFactory implements TypeAdapterFactory {
 
         @SuppressWarnings("unchecked")
         private TypeAdapter<T> selectAdapter(final JsonObject problem) {
-            @Nullable final TypeToken<? extends Problem> subType =
-                    Optional.ofNullable(problem.get("type"))
-                            .map(TYPE::fromJsonTree)
-                            .map(subtypes::get)
-                            .orElse(null);
+            @Nullable
+            final TypeToken<? extends Problem> subType = Optional.ofNullable(problem.get("type"))
+                    .map(TYPE::fromJsonTree)
+                    .map(subtypes::get)
+                    .orElse(null);
 
             if (subType == null) {
                 return (TypeAdapter<T>) defaultAdapter;
             }
 
-            final TypeToken<T> typeClass =
-                    (type.getRawType().isAssignableFrom(subType.getRawType()) ?
-                            (TypeToken<T>) subType :
-                            type);
+            final TypeToken<T> typeClass = (type.getRawType().isAssignableFrom(subType.getRawType())
+                    ? (TypeToken<T>) subType
+                    : type);
 
             return createCustomAdapter(gson, typeClass);
         }
