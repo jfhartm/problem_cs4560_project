@@ -31,4 +31,12 @@ public class MyGsonTest {
         UnknownStatus status = new UnknownStatus(499);
         assertThat(status.getStatusCode()).isEqualTo(499);
     }
+
+    @Test
+    void shouldReturnUnknownReasonPhrase() {
+        UnknownStatus status = new UnknownStatus(499);
+        assertThat(status.getReasonPhrase()).isEqualTo("Unknown");
+    }
+
+
 }
