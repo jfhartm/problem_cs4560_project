@@ -75,4 +75,11 @@ public class MyGsonTest {
         String json = gson.toJson(problem);
         assertThat(json).contains("400");
     }
+
+    @Test
+    void shouldDeserializeJsonToThrowableProblem() throws IOException {
+        String json = "{\"status\":400,\"title\":\"Bad Request\"}";
+        ThrowableProblem result = gson.fromJson(json, ThrowableProblem.class);
+        assertThat(result.getStatus()).isEqualTo(Status.BAD_REQUEST);
+    }
 }
