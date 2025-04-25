@@ -82,4 +82,11 @@ public class MyGsonTest {
         ThrowableProblem result = gson.fromJson(json, ThrowableProblem.class);
         assertThat(result.getStatus()).isEqualTo(Status.BAD_REQUEST);
     }
+
+    @Test
+    void shouldHandleNullStatusGracefully() throws IOException {
+        StatusTypeAdapter adapter = new StatusTypeAdapter(Collections.emptyMap());
+        JsonWriter writer = new JsonWriter(new StringWriter());
+        adapter.write(writer, null); // Should not throw
+    }
 }
