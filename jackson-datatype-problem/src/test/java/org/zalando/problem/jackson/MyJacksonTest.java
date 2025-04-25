@@ -21,6 +21,12 @@ class MyJacksonTest {
         assertThat(json).contains("\"status\":404");
     }
 
-
+    @Test
+    void shouldSerializeStatusCodeAsNumber() throws IOException {
+        JsonGenerator generator = mock(JsonGenerator.class);
+        StatusType status = Status.BAD_REQUEST;
+        new StatusTypeSerializer().serialize(status, generator, null);
+        verify(generator).writeNumber(status.getStatusCode());
+    }
 }
 
