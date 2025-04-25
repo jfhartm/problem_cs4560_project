@@ -63,4 +63,16 @@ public class MyGsonTest {
         StatusType result = new StatusTypeAdapter(map).read(reader);
         assertThat(result.getReasonPhrase()).isEqualTo("Unknown");
     }
+
+    @Test
+    void shouldSerializeThrowableProblemToJson() throws IOException {
+        ThrowableProblem problem = Problem.builder()
+                .withType(URI.create("about:blank"))
+                .withTitle("Bad Request")
+                .withStatus(Status.BAD_REQUEST)
+                .build();
+
+        String json = gson.toJson(problem);
+        assertThat(json).contains("400");
+    }
 }
