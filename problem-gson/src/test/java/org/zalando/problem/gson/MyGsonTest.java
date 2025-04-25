@@ -55,4 +55,12 @@ public class MyGsonTest {
         StatusType result = new StatusTypeAdapter(map).read(reader);
         assertThat(result).isEqualTo(Status.NOT_FOUND);
     }
+
+    @Test
+    void shouldReturnUnknownStatusForInvalidCode() throws IOException {
+        Map<Integer, StatusType> map = Collections.singletonMap(404, Status.NOT_FOUND);
+        JsonReader reader = new JsonReader(new StringReader("999"));
+        StatusType result = new StatusTypeAdapter(map).read(reader);
+        assertThat(result.getReasonPhrase()).isEqualTo("Unknown");
+    }
 }
